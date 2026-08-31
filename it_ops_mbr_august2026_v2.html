@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Ops MBR — August 2026</title>
+<style>
+  :root {
+    --surface-0: #111110; --surface-1: #1a1a19; --surface-2: #222221;
+    --text-primary: #f0efe9; --text-secondary: #c3c2b7; --text-muted: #898781;
+    --text-success: #4ade80; --text-danger: #f87171; --text-warning: #fbbf24;
+    --bg-success: #052e16; --bg-danger: #2d0a0a; --bg-warning: #2a1a00;
+    --border: rgba(255,255,255,0.08); --radius: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  body { background: var(--surface-0); padding: 2rem; color: var(--text-primary); }
+  h1 { font-size: 18px; font-weight: 500; color: var(--text-primary); }
+  .sub { font-size: 13px; color: var(--text-muted); margin-top: 3px; margin-bottom: 12px; }
+  .narr { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.25rem; padding: 10px 14px; background: var(--surface-1); border-left: 3px solid #3987e5; border-radius: 0 8px 8px 0; }
+  .narr strong { font-weight: 500; color: var(--text-primary); }
+  .kg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.25rem; }
+  .kc { background: var(--surface-1); border-radius: 8px; padding: 14px; }
+  .kl { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .kv { font-size: 22px; font-weight: 500; color: var(--text-primary); }
+  .kd { font-size: 11px; margin-top: 5px; }
+  .up { color: var(--text-success); } .dn { color: var(--text-danger); } .nt { color: var(--text-muted); }
+  .cr { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.25rem; }
+  .cc { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 16px; }
+  .ct { font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-bottom: 3px; }
+  .cs { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; }
+  .lg { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 8px; }
+  .li { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-secondary); }
+  .ls { width: 9px; height: 9px; border-radius: 2px; }
+  .br { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .sc { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 16px; }
+  .st { font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-bottom: 12px; }
+  .hi { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 0.5px solid var(--border); }
+  .hi:last-child { border-bottom: none; }
+  .hic { width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px; font-weight: 500; }
+  .hw { background: var(--bg-success); color: var(--text-success); }
+  .hwa { background: var(--bg-warning); color: var(--text-warning); }
+  .hd { background: var(--bg-danger); color: var(--text-danger); }
+  .hs { font-size: 12px; font-weight: 500; color: var(--text-primary); display: block; margin-bottom: 2px; }
+  .hb { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+  .mr { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 0.5px solid var(--border); }
+  .mr:last-child { border-bottom: none; }
+  .ml { font-size: 12px; color: var(--text-primary); }
+  .mv { display: flex; gap: 12px; }
+  .mp { font-size: 12px; color: var(--text-muted); min-width: 46px; text-align: right; }
+  .mc { font-size: 12px; font-weight: 500; color: var(--text-primary); min-width: 46px; text-align: right; }
+  .md { font-size: 11px; min-width: 46px; text-align: right; }
+  .mh { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .mhl { font-size: 11px; color: var(--text-muted); }
+  .mhv { display: flex; gap: 12px; }
+  .mhc { font-size: 11px; color: var(--text-muted); min-width: 46px; text-align: right; }
+  .prog { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 1.25rem; }
+  .prog-title { font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-bottom: 12px; }
+  .prog-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .pm { text-align: center; padding: 10px 6px; border-radius: 8px; background: var(--surface-1); }
+  .pm.cur { background: #0c2040; }
+  .pm-label { font-size: 10px; color: var(--text-muted); margin-bottom: 4px; }
+  .pm-val { font-size: 16px; font-weight: 500; color: var(--text-primary); }
+  .pm-sub { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+  .pm-arrow { font-size: 11px; margin-top: 4px; }
+</style>
+</head>
+<body>
+<h1>IT Ops — monthly scorecard</h1>
+<div class="sub">August 2026 · Aug 1 – Aug 30 · compared to July (Jun 30 – Jul 26)</div>
+
+<div class="narr"><strong>The story this month:</strong> Volume is back up to 1,524. AI rate dipped to 34% but the absolute count of AI-resolved tickets (478) increased — the percentage shift reflects higher total volume, not a regression. Backlog continued to shrink to 297. Headcount remains the binding constraint on further improvement.</div>
+
+<div class="kg">
+  <div class="kc"><div class="kl">Total tickets</div><div class="kv">1,524</div><div class="kd up">↑ from 1,316 in July</div></div>
+  <div class="kc"><div class="kl">AI resolved</div><div class="kv">34%</div><div class="kd dn">↓ from 42% in July</div></div>
+  <div class="kc"><div class="kl">Avg resolution time</div><div class="kv">24.9h</div><div class="kd dn">↑ from 21h in July</div></div>
+  <div class="kc"><div class="kl">Open backlog</div><div class="kv">297</div><div class="kd up">↓ from 315 in July</div></div>
+</div>
+
+<div class="prog">
+  <div class="prog-title">AI resolution rate — April through August</div>
+  <div class="prog-grid">
+    <div class="pm"><div class="pm-label">April</div><div class="pm-val">19%</div><div class="pm-sub">1,480 tickets</div></div>
+    <div class="pm"><div class="pm-label">May</div><div class="pm-val">24%</div><div class="pm-sub">1,524 tickets</div><div class="pm-arrow up">↑ +5pts</div></div>
+    <div class="pm"><div class="pm-label">June</div><div class="pm-val">38%</div><div class="pm-sub">1,505 tickets</div><div class="pm-arrow up">↑ +14pts</div></div>
+    <div class="pm"><div class="pm-label">July</div><div class="pm-val">42%</div><div class="pm-sub">1,316 tickets</div><div class="pm-arrow up">↑ +4pts</div></div>
+    <div class="pm cur"><div class="pm-label">August</div><div class="pm-val">34%</div><div class="pm-sub">1,524 tickets</div><div class="pm-arrow dn">↓ –8pts</div></div>
+  </div>
+</div>
+
+<div class="cr">
+  <div class="cc">
+    <div class="ct">AI resolution rate — monthly trend</div>
+    <div class="cs">April through August</div>
+    <div class="lg"><span class="li"><span class="ls" style="background:#3987e5;"></span>AI resolved %</span></div>
+    <div style="position:relative;width:100%;height:160px;"><canvas id="aiChart"></canvas></div>
+  </div>
+  <div class="cc">
+    <div class="ct">Ticket handling — Jul vs Aug</div>
+    <div class="cs">AI resolved, AI assisted, unassisted</div>
+    <div class="lg">
+      <span class="li"><span class="ls" style="background:#3987e5;"></span>AI resolved</span>
+      <span class="li"><span class="ls" style="background:#199e70;"></span>AI assisted</span>
+      <span class="li"><span class="ls" style="background:#d95926;"></span>Unassisted</span>
+    </div>
+    <div style="position:relative;width:100%;height:160px;"><canvas id="handChart"></canvas></div>
+  </div>
+</div>
+
+<div class="br">
+  <div class="sc">
+    <div class="st">Month-over-month comparison — July vs August</div>
+    <div class="mh"><span class="mhl">Metric</span><div class="mhv"><span class="mhc">July</span><span class="mhc">August</span><span class="mhc">Change</span></div></div>
+    <div class="mr"><span class="ml">Total tickets</span><div class="mv"><span class="mp">1,316</span><span class="mc">1,524</span><span class="md up">+208</span></div></div>
+    <div class="mr"><span class="ml">Resolved</span><div class="mv"><span class="mp">1,004</span><span class="mc">1,214</span><span class="md up">+210</span></div></div>
+    <div class="mr"><span class="ml">AI resolved %</span><div class="mv"><span class="mp">42%</span><span class="mc">34%</span><span class="md dn">–8pts</span></div></div>
+    <div class="mr"><span class="ml">AI assisted %</span><div class="mv"><span class="mp">38%</span><span class="mc">36%</span><span class="md dn">–2pts</span></div></div>
+    <div class="mr"><span class="ml">Unassisted %</span><div class="mv"><span class="mp">20%</span><span class="mc">23%</span><span class="md dn">+3pts</span></div></div>
+    <div class="mr"><span class="ml">Avg resolution time</span><div class="mv"><span class="mp">21h</span><span class="mc">24.9h</span><span class="md dn">+3.9h</span></div></div>
+    <div class="mr"><span class="ml">% handled by AI</span><div class="mv"><span class="mp">0.357</span><span class="mc">0.337</span><span class="md dn">–0.02</span></div></div>
+    <div class="mr"><span class="ml">Open backlog</span><div class="mv"><span class="mp">315</span><span class="mc">297</span><span class="md up">–18</span></div></div>
+    <div class="mr"><span class="ml">Tickets created</span><div class="mv"><span class="mp">1,568</span><span class="mc">1,521</span><span class="md nt">–47</span></div></div>
+    <div class="mr"><span class="ml">Tickets closed</span><div class="mv"><span class="mp">1,207</span><span class="mc">1,212</span><span class="md up">+5</span></div></div>
+  </div>
+
+  <div class="sc">
+    <div class="st">Highlights</div>
+    <div class="hi"><div class="hic hw">+</div><div><span class="hs">Backlog slowly improving</span><span class="hb">Down to 297 from 315 in July. Tickets closed (1,212) nearly matched tickets created (1,521) — closest gap since tracking began.</span></div></div>
+    <div class="hi"><div class="hic hw">+</div><div><span class="hs">More tickets resolved overall</span><span class="hb">1,214 resolved in August vs 1,004 in July — 21% more resolutions despite the AI rate percentage dipping.</span></div></div>
+    <div class="hi"><div class="hic hwa">!</div><div><span class="hs">AI rate dipped to 34% — context matters</span><span class="hb">Down from 42% in July, but absolute AI-resolved count increased (419 → 478). The dip reflects higher total volume, not a drop in AI performance.</span></div></div>
+    <div class="hi"><div class="hic hd">!</div><div><span class="hs">Capacity gap persists</span><span class="hb">Volume back at 1,524. Marginal backlog improvement continues but headcount remains the binding constraint.</span></div></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const gc = '#2c2c2a', tc = '#898781';
+const bx = { ticks: { color: tc, font: { size: 11 }, autoSkip: false }, grid: { display: false }, border: { display: false } };
+const by = { ticks: { color: tc, font: { size: 11 } }, grid: { color: gc }, border: { display: false } };
+
+new Chart(document.getElementById('aiChart'), {
+  type: 'line',
+  data: {
+    labels: ['April', 'May', 'June', 'July', 'August'],
+    datasets: [{ label: 'AI resolved %', data: [19, 24, 38, 42, 34],
+      borderColor: '#3987e5', backgroundColor: 'rgba(57,135,229,0.1)',
+      borderWidth: 2, pointRadius: 5,
+      pointBackgroundColor: ['#3987e5','#3987e5','#3987e5','#3987e5','#d95926'],
+      pointBorderColor: '#111110', pointBorderWidth: 2, tension: 0.3, fill: true }]
+  },
+  options: { responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => 'AI resolved: ' + ctx.parsed.y + '%' } } },
+    scales: { x: bx, y: { ...by, min: 0, max: 55, ticks: { ...by.ticks, callback: v => v + '%' } } } }
+});
+
+new Chart(document.getElementById('handChart'), {
+  type: 'bar',
+  data: {
+    labels: ['July', 'August'],
+    datasets: [
+      { label: 'AI resolved', data: [419, 478], backgroundColor: '#3987e5', borderRadius: { topLeft: 4, topRight: 4 }, barPercentage: 0.65, categoryPercentage: 0.75 },
+      { label: 'AI assisted', data: [375, 432], backgroundColor: '#199e70', borderRadius: { topLeft: 4, topRight: 4 }, barPercentage: 0.65, categoryPercentage: 0.75 },
+      { label: 'Unassisted', data: [198, 278], backgroundColor: '#d95926', borderRadius: { topLeft: 4, topRight: 4 }, barPercentage: 0.65, categoryPercentage: 0.75 }
+    ]
+  },
+  options: { responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y } } },
+    scales: { x: bx, y: { ...by } } }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Ops MBR — June 2026</title>
+<style>
+  :root {
+    --surface-0: #111110; --surface-1: #1a1a19; --surface-2: #222221;
+    --text-primary: #f0efe9; --text-secondary: #c3c2b7; --text-muted: #898781;
+    --text-success: #4ade80; --text-danger: #f87171; --text-warning: #fbbf24;
+    --bg-success: #052e16; --bg-danger: #2d0a0a; --bg-warning: #2a1a00;
+    --border: rgba(255,255,255,0.08); --radius: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  body { background: var(--surface-0); padding: 2rem; color: var(--text-primary); }
+  h1 { font-size: 18px; font-weight: 500; color: var(--text-primary); }
+  .sub { font-size: 13px; color: var(--text-muted); margin-top: 3px; margin-bottom: 12px; }
+  .narr { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.25rem; padding: 10px 14px; background: var(--surface-1); border-left: 3px solid #3987e5; border-radius: 0 8px 8px 0; }
+  .narr strong { font-weight: 500; color: var(--text-primary); }
+  .kg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.25rem; }
+  .kc { background: var(--surface-1); border-radius: 8px; padding: 14px; }
+  .kl { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .kv { font-size: 22px; font-weight: 500; color: var(--text-primary); }
+  .kd { font-size: 11px; margin-top: 5px; }
+  .up { color: var(--text-success); } .dn { color: var(--text-danger); } .nt { color: var(--text-muted); }
+  .cr { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.25rem; }
+  .cc { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 16px; }
+  .ct { font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-bottom: 3px; }
+  .cs { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; }
+  .lg { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 8px; }
+  .li { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-secondary); }
+  .ls { width: 9px; height: 9px; border-radius: 2px; }
+  .br { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .sc { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 16px; }
+  .st { font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-bottom: 12px; }
+  .hi { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 0.5px solid var(--border); }
+  .hi:last-child { border-bottom: none; }
+  .hic { width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px; font-weight: 500; }
+  .hw { background: var(--bg-success); color: var(--text-success); }
+  .hwa { background: var(--bg-warning); color: var(--text-warning); }
+  .hd { background: var(--bg-danger); color: var(--text-danger); }
+  .hs { font-size: 12px; font-weight: 500; color: var(--text-primary); display: block; margin-bottom: 2px; }
+  .hb { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+  .mr { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 0.5px solid var(--border); }
+  .mr:last-child { border-bottom: none; }
+  .ml { font-size: 12px; color: var(--text-primary); }
+  .mv { display: flex; gap: 12px; }
+  .mp { font-size: 12px; color: var(--text-muted); min-width: 46px; text-align: right; }
+  .mc { font-size: 12px; font-weight: 500; color: var(--text-primary); min-width: 46px; text-align: right; }
+  .md { font-size: 11px; min-width: 46px; text-align: right; }
+  .mh { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .mhl { font-size: 11px; color: var(--text-muted); }
+  .mhv { display: flex; gap: 12px; }
+  .mhc { font-size: 11px; color: var(--text-muted); min-width: 46px; text-align: right; }
+  .prog { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 1.25rem; }
+  .prog-title { font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-bottom: 12px; }
+  .prog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .pm { text-align: center; padding: 10px 6px; border-radius: 8px; background: var(--surface-1); }
+  .pm.cur { background: #0c2040; }
+  .pm-label { font-size: 10px; color: var(--text-muted); margin-bottom: 4px; }
+  .pm-val { font-size: 16px; font-weight: 500; color: var(--text-primary); }
+  .pm-sub { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+  .pm-arrow { font-size: 11px; margin-top: 4px; }
+</style>
+</head>
+<body>
+<h1>IT Ops — monthly scorecard</h1>
+<div class="sub">June 2026 · Jun 1 – Jun 27 · compared to May (Apr 30 – May 31)</div>
+
+<div class="narr"><strong>The story this month:</strong> AI resolution rate nearly doubled from 19% in April to 38%, our highest rate yet. Volume held steady at ~1,500/month. The backlog is climbing because headcount hasn't scaled with demand. This is a staffing ratio problem, not an ops failure.</div>
+
+<div class="kg">
+  <div class="kc"><div class="kl">Total tickets</div><div class="kv">1,505</div><div class="kd nt">~390/wk · up 3x since Apr</div></div>
+  <div class="kc"><div class="kl">AI resolved</div><div class="kv">38%</div><div class="kd up">↑ from 19% in April · new high</div></div>
+  <div class="kc"><div class="kl">Avg resolution time</div><div class="kv">26h</div><div class="kd up">↓ from 198h in April</div></div>
+  <div class="kc"><div class="kl">Open backlog</div><div class="kv">353</div><div class="kd dn">↑ 56% vs May · capacity gap</div></div>
+</div>
+
+<div class="prog">
+  <div class="prog-title">AI resolution rate — April through June</div>
+  <div class="prog-grid">
+    <div class="pm"><div class="pm-label">April</div><div class="pm-val">19%</div><div class="pm-sub">1,480 tickets</div></div>
+    <div class="pm"><div class="pm-label">May</div><div class="pm-val">24%</div><div class="pm-sub">1,524 tickets</div><div class="pm-arrow up">↑ +5pts</div></div>
+    <div class="pm cur"><div class="pm-label">June</div><div class="pm-val">38%</div><div class="pm-sub">1,505 tickets</div><div class="pm-arrow up">↑ +14pts</div></div>
+  </div>
+</div>
+
+<div class="cr">
+  <div class="cc">
+    <div class="ct">AI resolution rate — Apr through Jun</div>
+    <div class="cs">Monthly trend</div>
+    <div class="lg"><span class="li"><span class="ls" style="background:#3987e5;"></span>AI resolved %</span></div>
+    <div style="position:relative;width:100%;height:160px;"><canvas id="aiChart"></canvas></div>
+  </div>
+  <div class="cc">
+    <div class="ct">Ticket handling — May vs Jun</div>
+    <div class="cs">AI resolved, AI assisted, unassisted</div>
+    <div class="lg">
+      <span class="li"><span class="ls" style="background:#3987e5;"></span>AI resolved</span>
+      <span class="li"><span class="ls" style="background:#199e70;"></span>AI assisted</span>
+      <span class="li"><span class="ls" style="background:#d95926;"></span>Unassisted</span>
+    </div>
+    <div style="position:relative;width:100%;height:160px;"><canvas id="handChart"></canvas></div>
+  </div>
+</div>
+
+<div class="br">
+  <div class="sc">
+    <div class="st">Month-over-month comparison — May vs June</div>
+    <div class="mh"><span class="mhl">Metric</span><div class="mhv"><span class="mhc">May</span><span class="mhc">June</span><span class="mhc">Change</span></div></div>
+    <div class="mr"><span class="ml">Total tickets</span><div class="mv"><span class="mp">1,524</span><span class="mc">1,505</span><span class="md nt">–19</span></div></div>
+    <div class="mr"><span class="ml">Resolved</span><div class="mv"><span class="mp">1,292</span><span class="mc">1,158</span><span class="md nt">–</span></div></div>
+    <div class="mr"><span class="ml">AI resolved %</span><div class="mv"><span class="mp">24%</span><span class="mc">38%</span><span class="md up">+14pts</span></div></div>
+    <div class="mr"><span class="ml">AI assisted %</span><div class="mv"><span class="mp">41%</span><span class="mc">35%</span><span class="md dn">–6pts</span></div></div>
+    <div class="mr"><span class="ml">Unassisted %</span><div class="mv"><span class="mp">36%</span><span class="mc">27%</span><span class="md up">–9pts</span></div></div>
+    <div class="mr"><span class="ml">Avg resolution time</span><div class="mv"><span class="mp">104h</span><span class="mc">26h</span><span class="md up">–78h</span></div></div>
+    <div class="mr"><span class="ml">% handled by AI</span><div class="mv"><span class="mp">0.216</span><span class="mc">0.318</span><span class="md up">+0.102</span></div></div>
+    <div class="mr"><span class="ml">Open backlog</span><div class="mv"><span class="mp">226</span><span class="mc">353</span><span class="md dn">+127</span></div></div>
+  </div>
+
+  <div class="sc">
+    <div class="st">Highlights</div>
+    <div class="hi"><div class="hic hw">+</div><div><span class="hs">AI rate hits 38% — new high</span><span class="hb">Nearly doubled from 19% in April. Unassisted rate dropped to 27%, meaning fewer tickets falling through without coverage.</span></div></div>
+    <div class="hi"><div class="hic hw">+</div><div><span class="hs">Resolution time dropped 78 hours</span><span class="hb">From 104h in May to 26h in June. Faster resolution directly impacts the employee experience.</span></div></div>
+    <div class="hi"><div class="hic hw">+</div><div><span class="hs">AI absorbing more volume</span><span class="hb">Combined AI resolved and assisted rate is 73%, up from 65% in May.</span></div></div>
+    <div class="hi"><div class="hic hd">!</div><div><span class="hs">Backlog reflects a capacity gap, not a process gap</span><span class="hb">Volume grew 3x since April. Headcount did not. AI absorbed the delta where it could — the remainder is queuing.</span></div></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const gc = '#2c2c2a', tc = '#898781';
+const bx = { ticks: { color: tc, font: { size: 11 }, autoSkip: false }, grid: { display: false }, border: { display: false } };
+const by = { ticks: { color: tc, font: { size: 11 } }, grid: { color: gc }, border: { display: false } };
+
+new Chart(document.getElementById('aiChart'), {
+  type: 'line',
+  data: {
+    labels: ['April', 'May', 'June'],
+    datasets: [{ label: 'AI resolved %', data: [19, 24, 38],
+      borderColor: '#3987e5', backgroundColor: 'rgba(57,135,229,0.1)',
+      borderWidth: 2, pointRadius: 5, pointBackgroundColor: '#3987e5',
+      pointBorderColor: '#111110', pointBorderWidth: 2, tension: 0.3, fill: true }]
+  },
+  options: { responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => 'AI resolved: ' + ctx.parsed.y + '%' } } },
+    scales: { x: bx, y: { ...by, min: 0, max: 55, ticks: { ...by.ticks, callback: v => v + '%' } } } }
+});
+
+new Chart(document.getElementById('handChart'), {
+  type: 'bar',
+  data: {
+    labels: ['May', 'June'],
+    datasets: [
+      { label: 'AI resolved', data: [366, 426], backgroundColor: '#3987e5', borderRadius: { topLeft: 4, topRight: 4 }, barPercentage: 0.65, categoryPercentage: 0.75 },
+      { label: 'AI assisted', data: [512, 395], backgroundColor: '#199e70', borderRadius: { topLeft: 4, topRight: 4 }, barPercentage: 0.65, categoryPercentage: 0.75 },
+      { label: 'Unassisted', data: [451, 300], backgroundColor: '#d95926', borderRadius: { topLeft: 4, topRight: 4 }, barPercentage: 0.65, categoryPercentage: 0.75 }
+    ]
+  },
+  options: { responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y } } },
+    scales: { x: bx, y: { ...by } } }
+});
+</script>
+</body>
+</html>
